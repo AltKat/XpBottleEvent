@@ -1,0 +1,4 @@
+com\example\project\testPlugin\tabcompleter\EventTabCompleter.class
+com\example\project\testPlugin\TestPlugin.class
+com\example\project\testPlugin\commands\EventCommand.class
+com\example\project\testPlugin\listeners\XPBottleBreakListener.class

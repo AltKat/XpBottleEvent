@@ -1,0 +1,14 @@
+name: TestPlugin
+version: ${project.version}
+main: com.example.project.testPlugin.TestPlugin
+api-version: '1.21'
+authors: [ Hadwwikk ]
+description: My first plugin
+commands:
+  event:
+    description: Main event command
+    usage: /event <start|join|info|location>
+permissions:
+  event.use:
+    description: "Allows using the /event start command"
+    default: op
