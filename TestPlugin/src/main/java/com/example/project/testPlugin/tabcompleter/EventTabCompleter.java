@@ -22,7 +22,7 @@ public class EventTabCompleter implements TabCompleter {
         }
 
         if (args.length == 2) {
-            // ADD
+
         }
 
         return completions;

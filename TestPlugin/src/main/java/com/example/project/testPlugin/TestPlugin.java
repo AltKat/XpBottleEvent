@@ -15,9 +15,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class TestPlugin extends JavaPlugin implements Listener {
     private static final String Prefix = ChatColor.RED + "Lunaya | " + ChatColor.WHITE;
 
+    private static TestPlugin instance;
+
     @Override
     public void onEnable() { // There are called when the plugin starts
         // Plugin startup logic
+
 
         getLogger().info("\u001B[31mTest Plugin has been enabled!.\u001B[0m"); // console message
 
@@ -28,6 +31,12 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
         // TabCompleter save
         getCommand("event").setTabCompleter(new EventTabCompleter());
+
+        instance = this; // ★★★
+    }
+
+    public static TestPlugin getInstance() {  // ★★★
+        return instance;
     }
 
 
