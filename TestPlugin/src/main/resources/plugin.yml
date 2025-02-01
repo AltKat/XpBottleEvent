@@ -1,14 +1,20 @@
-name: TestPlugin
-version: ${project.version}
+name: XpBottleEvent
+version: 1.0
 main: com.example.project.testPlugin.TestPlugin
-api-version: '1.21'
-authors: [ Hadwwikk ]
-description: My first plugin
+api-version: 1.21
+author: hadw1k0
+description: A plugin for an XP bottle event.
 commands:
   event:
-    description: Main event command
-    usage: /event <start|info|location>
+    description: Main command for the event.
+    usage: /event <start | info | location>
+    aliases: []
+    permission: event.use
+    permission-message: "You do not have permission to use this command!"
 permissions:
   event.use:
-    description: "Allows using the /event start command"
+    description: Allows the player to use /event start.
     default: op
+  event.view:
+    description: Allows access to /event, /event info, and /event location.
+    default: true
