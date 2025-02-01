@@ -65,31 +65,58 @@ public class EventCommand implements CommandExecutor {
 
         // Run only for "/event info"
         if (args.length > 0 && args[0].equalsIgnoreCase("info")) {
+            Location startLocatin = player.getLocation(); // start location
             player.sendMessage(lunaPREFIX + "Hello " + ChatColor.GREEN + player.getName() + ChatColor.RESET + ", Now I will teach you this event." +
                     ChatColor.GREEN + "\nFirstly, " + ChatColor.RESET + "this event is played with an xp bottle. " +
                     "The main purpose here is, ");
                     player.teleport(eventLocation);
 
-                    // add wait 3 seconds
-                    // 3 saniye beklemek için BukkitRunnable kullanabiliriz (ana iş parçacığını engellemeden) -> Sana attığım gibi olmadan yani :)
-
                 TestPlugin plugin = TestPlugin.getInstance(); // ★★★ start time
-
+                // add wait 3 seconds
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         player.sendMessage(lunaPREFIX + "You need to throw the XP bottle at the netherite blocks like a basketball, it gives you a reward if you hit it. ");
-                        player.getInventory().addItem(new ItemStack(Material.EXPERIENCE_BOTTLE));
                     }
                 }.runTaskLater(plugin, 60L); // first task
 
+                // add wait 3 seconds
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        player.getInventory().addItem(new ItemStack(Material.EXPERIENCE_BOTTLE, 5));
                         player.sendMessage(lunaPREFIX + "Now hold these XP bottles and try!");
                     }
                 }.runTaskLater(plugin, 120L); // second task
 
+                // Teleport to starting location 5 seconds after finishing XP bottles
+                new BukkitRunnable() { // The first BukkitRunnable checks every second to see if XP bottles have run out.
+
+                    @Override
+                    public void run() {
+
+                        int currentXPCount = 0;
+
+                        for (ItemStack item : player.getInventory().getContents()) {
+                            if (item != null && item.getType() == Material.EXPERIENCE_BOTTLE) {
+                                currentXPCount += item.getAmount();
+                            }
+                        }
+
+                        if (currentXPCount == 0) {
+                            this.cancel(); // Stop the loop
+                            player.sendMessage(lunaPREFIX + "Congratulations, you can now continue where you left off. " + ChatColor.GREEN + "After 5 seconds");
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    player.teleport(startLocatin);
+                                    player.sendMessage(lunaPREFIX + ChatColor.GREEN + "You are back at your start position!");
+                                }
+                            }.runTaskLater(plugin, 100L); // 5 seconds
+
+                        }
+                    }
+                }.runTaskTimer(plugin, 130L, 30L); // Check every second.
             return true;
         }
 
