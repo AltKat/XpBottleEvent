@@ -24,7 +24,9 @@ public class EventCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 
-        Location eventLocation = new Location(Bukkit.getWorld("world"), -35, 63, -100); // set the world name and coordinate
+        Location eventLocation = new Location(Bukkit.getWorld("hub"), 0, 70, -90); // set the world name and coordinate
+        Location infoLocation = new Location(Bukkit.getWorld("hub"), 129.5, 68, -51.5);
+
 
         if (!(sender instanceof Player player)) { // If the sender is not a player -> console cannot start events
             sender.sendMessage(lunaPREFIX + ChatColor.RED + "Only players can use this command!");
@@ -42,14 +44,28 @@ public class EventCommand implements CommandExecutor {
             player.sendMessage(lunaPREFIX + ChatColor.BLUE + "Event Command Usage:");
             player.sendMessage(lunaPREFIX + "/event start - Teleport to the event area.");
             player.sendMessage(lunaPREFIX + "/event location - Get the coordinates of the event.");
-            player.sendMessage(lunaPREFIX + "/event info - Learn how to play the event.");
+            player.sendMessage(lunaPREFIX + "/event information - Learn how to play the event.");
             return true;
         }
 
         // Run only for "/event start"
         if (args.length > 0 && args[0].equalsIgnoreCase("start")) {
-            player.teleport(eventLocation);
-            player.sendMessage(lunaPREFIX + ChatColor.AQUA + player.getName() + ChatColor.RESET + ", You were teleported to the event area.");
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+             TestPlugin plugin = TestPlugin.getInstance();
+             onlinePlayer.sendMessage(lunaPREFIX + "Hello! " + ChatColor.AQUA + onlinePlayer.getName() + ChatColor.RESET + ", Xp bottle event will start in 1 minute! ");
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        onlinePlayer.sendMessage(lunaPREFIX + "If you do not know the xp bottle event, you can find out by typing " + ChatColor.GOLD + "/event info");
+                    }
+                }.runTaskLater(plugin, 60L);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        onlinePlayer.sendMessage(lunaPREFIX + "Those who want to join the xp bottle event can type. " + ChatColor.GOLD + "/event join");
+                    }
+                }.runTaskLater(plugin, 1100L);
+            }
             return true;
         }
 
@@ -64,12 +80,12 @@ public class EventCommand implements CommandExecutor {
         }
 
         // Run only for "/event info"
-        if (args.length > 0 && args[0].equalsIgnoreCase("info")) {
+        if (args.length > 0 && (args[0].equalsIgnoreCase("info") || args.length > 0 && args[0].equalsIgnoreCase("information"))) { // We linked the two commands to the same function.
             Location startLocatin = player.getLocation(); // start location
             player.sendMessage(lunaPREFIX + "Hello " + ChatColor.GREEN + player.getName() + ChatColor.RESET + ", Now I will teach you this event." +
                     ChatColor.GREEN + "\nFirstly, " + ChatColor.RESET + "this event is played with an xp bottle. " +
                     "The main purpose here is, ");
-                    player.teleport(eventLocation);
+                    player.teleport(infoLocation);
 
                 TestPlugin plugin = TestPlugin.getInstance(); // ★★★ start time
                 // add wait 3 seconds
@@ -97,14 +113,16 @@ public class EventCommand implements CommandExecutor {
 
                         int currentXPCount = 0;
 
+
                         for (ItemStack item : player.getInventory().getContents()) {
                             if (item != null && item.getType() == Material.EXPERIENCE_BOTTLE) {
                                 currentXPCount += item.getAmount();
                             }
                         }
+                        // Bukkit.broadcastMessage(String.valueOf(currentXPCount)); // delete
 
                         if (currentXPCount == 0) {
-                            this.cancel(); // Stop the loop
+                            this.cancel(); // Stop the BukkitRunnable
                             player.sendMessage(lunaPREFIX + "Congratulations, you can now continue where you left off. " + ChatColor.GREEN + "After 5 seconds");
                             new BukkitRunnable() {
                                 @Override

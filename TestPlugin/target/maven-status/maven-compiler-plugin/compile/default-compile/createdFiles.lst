@@ -1,8 +1,12 @@
+com\example\project\testPlugin\listeners\EventBlockListener$1.class
 com\example\project\testPlugin\commands\EventCommand$2.class
-com\example\project\testPlugin\commands\EventCommand$3$1.class
+com\example\project\testPlugin\listeners\EventBlockListener.class
 com\example\project\testPlugin\TestPlugin.class
+com\example\project\testPlugin\commands\EventCommand$5$1.class
 com\example\project\testPlugin\commands\EventTabCompleter.class
-com\example\project\testPlugin\commands\EventCommand$1.class
 com\example\project\testPlugin\commands\EventCommand$3.class
-com\example\project\testPlugin\commands\EventCommand.class
 com\example\project\testPlugin\listeners\XPBottleBreakListener.class
+com\example\project\testPlugin\commands\EventCommand$4.class
+com\example\project\testPlugin\commands\EventCommand$1.class
+com\example\project\testPlugin\commands\EventCommand$5.class
+com\example\project\testPlugin\commands\EventCommand.class

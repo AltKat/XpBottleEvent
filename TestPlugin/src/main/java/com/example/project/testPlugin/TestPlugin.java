@@ -2,6 +2,7 @@ package com.example.project.testPlugin;
 
 import com.example.project.testPlugin.commands.EventCommand;
 import com.example.project.testPlugin.commands.EventTabCompleter;
+import com.example.project.testPlugin.listeners.EventBlockListener;
 import com.example.project.testPlugin.listeners.XPBottleBreakListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,6 +28,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(new XPBottleBreakListener(), this); // XPBottleBreakListener
         getServer().getPluginManager().registerEvents(this, this); // onPlayerJoinEvent, onPlayerQuitEvent
+        getServer().getPluginManager().registerEvents(new EventBlockListener(this), this); // EventBlockListener
 
         getCommand("event").setExecutor(new EventCommand());
 

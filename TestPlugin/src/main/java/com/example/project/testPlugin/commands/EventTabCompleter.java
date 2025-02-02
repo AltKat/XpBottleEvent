@@ -16,8 +16,11 @@ public class EventTabCompleter implements TabCompleter {
         if (args.length == 1) {
             // Subcommands of the event command
             completions.add("start");
+            completions.add("stop");
             completions.add("info");
+            completions.add("information");
             completions.add("location");
+            completions.add("join");
         }
 
         if (args.length == 2) {
