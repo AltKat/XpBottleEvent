@@ -11,9 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public class EventBlockListener implements Listener {
-
     private final TestPlugin plugin;
 
     public EventBlockListener(TestPlugin plugin) {
@@ -21,27 +21,30 @@ public class EventBlockListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(@NotNull BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        System.out.println("Block broken: " + block.getType()); // Bu satır event'in çalışıp çalışmadığını gösterecek.
+        System.out.println("Block broken: " + block.getType()); // Debug statement
 
-        TestPlugin plugin = TestPlugin.getInstance();
-
-        // If the broken block is a Netherite Block and is in the specified area
+        // Eğer kırılan blok Netherite ve belirlenen alandaysa
         if (block.getType() == Material.NETHERITE_BLOCK && isInsideEventArea(block.getLocation())) {
+            System.out.println("Block is Netherite and inside event area"); // Debug statement
             Location blockLocation = block.getLocation();
             player.sendMessage(ChatColor.YELLOW + "You broke a netherite block! It will regenerate soon...");
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    blockLocation.getBlock().setType(Material.NETHERITE_BLOCK);
-                    player.sendMessage(ChatColor.GREEN + "The Netherite block has regenerated!");
+                    Block blockToRegen = blockLocation.getWorld().getBlockAt(blockLocation);
+                    if (blockToRegen.getType() == Material.AIR) {
+                        blockToRegen.setType(Material.NETHERITE_BLOCK);
+                        player.sendMessage(ChatColor.GREEN + "The Netherite block has regenerated!");
+                    } else {
+                        System.out.println("Block has already been replaced or is not air.");
+                    }
                 }
-            }.runTaskLater(plugin, 100L); // Recreate after 5 seconds
+            }.runTaskLater(plugin, 100L); // 5 saniye sonra tekrar oluştur
         }
     }
 
@@ -51,8 +54,6 @@ public class EventBlockListener implements Listener {
         int centerX = 129; // Alanın merkezi X
         int centerZ = -51; // Alanın merkezi Z
         int radius = 7; // 15x15 için yarıçap = 7
-
-        // infoLocation = 129.5, 68, -51.5
 
         String worldName = "hub";
 
@@ -64,7 +65,6 @@ public class EventBlockListener implements Listener {
         int z = location.getBlockZ();
 
         return (x >= centerX - radius && x <= centerX + radius) &&
-                (z >= centerZ - radius && z <= centerZ + radius); // gpt
+                (z >= centerZ - radius && z <= centerZ + radius);
     }
 }
-
